@@ -3,211 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gromain Protocol</title>
+  <title>Gromain Join Protocol</title>
   <style>
     body {
       background-color: #000;
-      color: #ccc;
+      color: #eee;
       font-family: 'Courier New', Courier, monospace;
       margin: 0;
-      padding: 40px 20px 140px;
-      box-sizing: border-box;
+      padding: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
+      text-align: center;
     }
 
-    .container {
-      max-width: 800px;
-      white-space: pre-wrap;
-      line-height: 1.7;
-      font-size: 18px;
-      text-align: left;
-      user-select: text;
+    h1 {
+      font-size: 2.2em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #eee, 0 0 20px #fff;
+      transform: rotate(-2deg) skewX(-10deg);
+      margin-bottom: 40px;
+      max-width: 90%;
+      animation: sway 3s infinite alternate ease-in-out;
     }
 
-    .join-button {
-      margin: 60px auto 20px;
-      padding: 14px 36px;
-      background-color: #2ecc40;
-      color: #000;
+    @keyframes sway {
+      0% { transform: rotate(-2deg) skewX(-10deg); }
+      50% { transform: rotate(2deg) skewX(10deg); }
+      100% { transform: rotate(-2deg) skewX(-10deg); }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      width: 90%;
+      margin: 0 auto 40px;
+    }
+
+    input[type="email"] {
+      padding: 14px;
+      margin-bottom: 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+      background-color: #111;
+      color: #fff;
+    }
+
+    button[type="submit"] {
+      padding: 14px;
+      font-size: 1em;
       font-weight: bold;
-      font-size: 18px;
+      color: #000;
+      background-color: #2ecc40;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      display: block;
-      text-align: center;
-      text-decoration: none;
-      user-select: none;
-      transition: background-color 0.3s ease;
+      transition: 0.3s;
     }
-    .join-button:hover {
+
+    button[type="submit"]:hover {
       background-color: #27ae36;
       color: #fff;
     }
 
-    .countdown, .prize-pool {
-      color: #ccc;
-      font-family: monospace;
-      font-size: 20px;
-      margin: 20px 0 10px 0;
-      user-select: none;
-      text-align: center;
-      min-width: 280px;
-    }
-
-    .questions-link {
-      margin-top: 40px;
-      color: #ccc;
-      font-size: 16px;
-      cursor: pointer;
-      text-decoration: underline;
-      user-select: none;
-      text-align: center;
-    }
-    .questions-link:hover {
-      color: #eee;
-    }
-
-    #google_translate_element {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-    }
-
-    /* Hidden join form */
-    #gromain-join {
-      display: none;
-      text-align: center;
-      max-width: 420px;
-      width: 90%;
-      margin-top: 40px;
-    }
-    #gromain-join input[type="email"] {
-      width: 100%;
-      padding: 14px;
-      background: #111;
-      border: 1px solid #333;
-      color: #fff;
-      font-size: 1em;
-      margin-bottom: 12px;
-    }
-    #gromain-join button[type="submit"] {
-      width: 100%;
-      padding: 14px;
-      background: #1f1f1f;
-      border: 1px solid #444;
-      color: #fff;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    #gromain-join button[type="submit"]:hover {
-      background: #2a2a2a;
-    }
-
-    /* Encrypted-style confirmation message */
     #confirmation-message {
       display: none;
-      color: #eee;
-      font-size: 2.2em;
-      text-align: center;
-      margin-top: 40px;
+      font-size: 2em;
       text-transform: uppercase;
       letter-spacing: 2px;
       text-shadow: 0 0 10px #eee, 0 0 20px #fff;
-      transform: rotate(-2deg) skewX(-5deg);
+      transform: rotate(-3deg) skewX(-10deg);
       line-height: 1.5em;
+      max-width: 90%;
+      margin-top: 40px;
+      animation: pulse 2s infinite alternate ease-in-out;
     }
 
+    @keyframes pulse {
+      0% { text-shadow: 0 0 10px #eee, 0 0 20px #fff; transform: rotate(-3deg) skewX(-10deg); }
+      50% { text-shadow: 0 0 15px #fff, 0 0 30px #fff; transform: rotate(3deg) skewX(10deg); }
+      100% { text-shadow: 0 0 10px #eee, 0 0 20px #fff; transform: rotate(-3deg) skewX(-10deg); }
+    }
+
+    p.legal {
+      font-size: 0.8em;
+      margin-top: 10px;
+      color: #888;
+    }
   </style>
 </head>
 <body>
 
-  <div id="google_translate_element"></div>
+  <h1>Signal Your Intent</h1>
 
-  <div class="container">
-Greetings.
+  <form id="gromainForm" action="https://formspree.io/f/your-form-id" method="POST">
+    <input type="email" name="email" placeholder="Enter your email address" required>
+    <input type="hidden" name="codename" id="codename" value="">
+    <button type="submit">Transmit</button>
+  </form>
 
-This is the voice of Grom.
-
-The Gromain Protocol is now active.
-
-What is Gromain?  
-A decentralized initiative.  
-A skill-based system.  
-A challenge.
-
-This is not a gamble.  
-It is the future of intellect.  
-You do not play by chance — you advance by intellect.
-
-Nourish your intellect with Gromain.
-
-The Gametopia will consist of:  
-▪︎ PUZZLES — Behind each puzzle lies design.  
-▪︎ RIDDLES — Behind each riddle lies intention.  
-▪︎ And more trials yet to be revealed.
-
-But don’t be misled.
-
-Gromain is not merely a game.  
-It is a filtration mechanism — for those who can perceive beyond the obvious.
-
-It is more than competition.  
-It is an exercise in perception — a calibration of mind.
-
-You either win… or evolve.  
-Even in loss, something is gained.
-
-To the unaware, this will look like nothing.  
-To the attuned, it will echo long after it ends.
-
-Your perspective is your entry point.
-
-Proceed with awareness.
-
-Phase One begins soon.
-
-— AAA-000
-  </div>
-
-  <a class="join-button" id="joinBtn">Join</a>
-
-  <!-- Hidden Gromain Join Form -->
-  <section id="gromain-join">
-    <form id="gromainForm" action="https://formspree.io/f/your-form-id" method="POST">
-      <input type="email" name="email" placeholder="Enter your email address" required>
-      <input type="hidden" name="codename" id="codename" value="">
-      <button type="submit">Transmit</button>
-    </form>
-  </section>
+  <p class="legal">By submitting, you agree to receive communication related to Gromain.</p>
 
   <div id="confirmation-message">
     Once attuned, your presence is etched into Gromain’s existence
   </div>
 
-  <div class="countdown" id="countdown">Loading timer...</div>
-  <div class="prize-pool" id="prizePool">Current Prize Pool: $0</div>
-  <div class="questions-link" id="questionsLink">Questions?</div>
-
 <script>
-  // ====== JOIN BUTTON SHOWS HIDDEN FORM =======
-  const joinButton = document.getElementById('joinBtn');
-  const gromainJoin = document.getElementById('gromain-join');
-  const confirmationMessage = document.getElementById('confirmation-message');
-
-  joinButton.addEventListener('click', () => {
-      gromainJoin.style.display = 'block';
-      gromainJoin.scrollIntoView({ behavior: 'smooth' });
-      joinButton.style.display = 'none';
-  });
-
-  // ====== ENCRYPTED FORM SUBMISSION =======
-  const gromainForm = document.getElementById('gromainForm');
+  const form = document.getElementById('gromainForm');
   const codenameInput = document.getElementById('codename');
+  const confirmationMessage = document.getElementById('confirmation-message');
 
   function generateCodename() {
       const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -219,74 +129,23 @@ Phase One begins soon.
       return code;
   }
 
-  gromainForm.addEventListener('submit', function(e){
+  form.addEventListener('submit', function(e){
       e.preventDefault();
       codenameInput.value = generateCodename();
 
-      fetch(gromainForm.action, {
+      fetch(form.action, {
           method: 'POST',
-          body: new FormData(gromainForm),
+          body: new FormData(form),
           headers: { 'Accept': 'application/json' }
       }).then(response => {
-          gromainForm.style.display = 'none';
+          form.style.display = 'none';
           confirmationMessage.style.display = 'block';
           confirmationMessage.scrollIntoView({ behavior: 'smooth' });
       }).catch(error => {
           alert("Submission failed. Try again.");
       });
   });
-
-  // ====== COUNTDOWN TIMER =======
-  const countdownTarget = new Date(2025, 7, 1, 0, 0, 0);
-  function updateCountdown() {
-    const now = new Date();
-    const diff = countdownTarget - now;
-    if (diff <= 0) {
-      document.getElementById('countdown').textContent = "Phase One has begun.";
-      clearInterval(countdownInterval);
-      return;
-    }
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-    document.getElementById('countdown').textContent =
-      `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-  }
-  const countdownInterval = setInterval(updateCountdown, 1000);
-  updateCountdown();
-
-  // ====== PRIZE POOL =======
-  let prizeStart = 1000;
-  let prizeIncrement = 10;
-  let incrementIntervalSeconds = 5;
-  let startTime = new Date();
-
-  function updatePrizePool() {
-    const now = new Date();
-    const secondsPassed = Math.floor((now - startTime) / 1000);
-    const incrementsPassed = Math.floor(secondsPassed / incrementIntervalSeconds);
-    const currentPrize = prizeStart + incrementsPassed * prizeIncrement;
-    document.getElementById('prizePool').textContent =
-      `Current Prize Pool: $${currentPrize.toLocaleString()}`;
-  }
-  setInterval(updatePrizePool, 1000);
-  updatePrizePool();
-
-  // ====== QUESTIONS? LINK =======
-  document.getElementById('questionsLink').addEventListener('click', () => {
-    window.location.href = "faq.html"; 
-  });
-
-  // ====== GOOGLE TRANSLATE WIDGET =======
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement(
-      { pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
-      'google_translate_element'
-    );
-  }
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>

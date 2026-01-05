@@ -1,140 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gromain Join</title>
-<style>
-body {
-  margin: 0;
-  background: #000;
-  color: #eaeaea;
-  font-family: "Courier New", monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-}
-
-.container {
-  max-width: 500px;
-  width: 90%;
-}
-
-h1 {
-  font-size: 2.4em;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 40px;
-  transform: rotate(-2deg) skewX(-12deg);
-  text-shadow: 0 0 12px #fff;
-  animation: sway 3s infinite alternate ease-in-out;
-}
-
-@keyframes sway {
-  0% { transform: rotate(-2deg) skewX(-12deg); }
-  50% { transform: rotate(2deg) skewX(12deg); }
-  100% { transform: rotate(-2deg) skewX(-12deg); }
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-input[type="email"] {
-  padding: 14px;
-  font-size: 1em;
-  background: #111;
-  border: 1px solid #333;
-  color: white;
-}
-
-button {
-  padding: 14px;
-  font-size: 1em;
-  font-weight: bold;
-  background: #2ecc40;
-  border: none;
-  cursor: pointer;
-}
-
-#message {
-  display: none;
-  margin-top: 40px;
-  font-size: 2em;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  transform: rotate(-3deg) skewX(-15deg);
-  text-shadow: 0 0 14px #fff;
-  animation: pulse 2s infinite alternate ease-in-out;
-}
-
-@keyframes pulse {
-  0% { transform: rotate(-3deg) skewX(-15deg); text-shadow: 0 0 14px #fff; }
-  50% { transform: rotate(3deg) skewX(15deg); text-shadow: 0 0 25px #fff; }
-  100% { transform: rotate(-3deg) skewX(-15deg); text-shadow: 0 0 14px #fff; }
-}
-
-p.legal {
-  font-size: 0.8em;
-  margin-top: 10px;
-  color: #888;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Gromain — Signal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #e6e6e6;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .lore {
+            font-size: 0.95em;
+            opacity: 0.85;
+            margin-bottom: 25px;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 14px;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 1em;
+            margin-bottom: 12px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #1f1f1f;
+            border: 1px solid #444;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2a2a2a;
+        }
+        .legal {
+            font-size: 0.75em;
+            opacity: 0.6;
+            margin-top: 14px;
+        }
+        .footer-lore {
+            font-size: 0.75em;
+            opacity: 0.5;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Signal Your Intent</h1>
+        <div class="lore">
+            This is not a registration.<br>
+            Only signals deemed relevant receive a response.
+        </div>
 
-<div class="container">
-  <h1>Signal Your Intent</h1>
+        <form id="signalForm">
+            <input type="email" placeholder="Enter your email address" required>
+            <button type="submit">Transmit</button>
+        </form>
 
-  <form id="form" action="https://formspree.io/f/your-form-id" method="POST">
-    <input type="email" name="email" required placeholder="Enter your Gmail">
-    <input type="hidden" name="codename" id="codename" value="">
-    <button type="submit">Transmit</button>
-  </form>
+        <div class="legal">
+            By submitting, you agree to receive communication related to Gromain.
+        </div>
 
-  <p class="legal">By submitting, you agree to receive communication related to Gromain.</p>
+        <div class="footer-lore">
+            Silence does not mean rejection.
+        </div>
+    </div>
 
-  <div id="message">
-    Once attuned, your presence is etched into Gromain’s existence
-  </div>
-</div>
-
-<script>
-const form = document.getElementById("form");
-const message = document.getElementById("message");
-const codenameInput = document.getElementById("codename");
-
-function generateCodename() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
-  let code = '';
-  for(let i=0;i<3;i++) code += letters[Math.floor(Math.random()*letters.length)];
-  code += '-';
-  for(let i=0;i<3;i++) code += numbers[Math.floor(Math.random()*numbers.length)];
-  return code;
-}
-
-form.addEventListener("submit", function(e){
-  e.preventDefault();
-  codenameInput.value = generateCodename();
-
-  fetch(form.action, {
-    method: 'POST',
-    body: new FormData(form),
-    headers: { 'Accept': 'application/json' }
-  }).then(response => {
-    form.style.display = "none";
-    message.style.display = "block";
-    message.scrollIntoView({behavior:"smooth"});
-  }).catch(error => {
-    alert("Submission failed. Try again.");
-  });
-});
-</script>
-
+    <script>
+        // Optional: handle form submission
+        document.getElementById('signalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your signal has been transmitted.'); // Placeholder response
+            this.reset();
+        });
+    </script>
 </body>
 </html>

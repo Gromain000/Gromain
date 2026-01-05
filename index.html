@@ -3,149 +3,205 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gromain Join Protocol</title>
+  <title>Gromain Protocol</title>
   <style>
     body {
       background-color: #000;
-      color: #eee;
+      color: #ccc;
       font-family: 'Courier New', Courier, monospace;
       margin: 0;
-      padding: 0;
+      padding: 40px 20px 140px; /* extra bottom space */
+      box-sizing: border-box;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      text-align: center;
     }
 
-    h1 {
-      font-size: 2.2em;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px #eee, 0 0 20px #fff;
-      transform: rotate(-2deg) skewX(-10deg);
-      margin-bottom: 40px;
-      max-width: 90%;
-      animation: sway 3s infinite alternate ease-in-out;
+    .container {
+      max-width: 800px;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 18px;
+      text-align: left;
+      user-select: text;
     }
 
-    @keyframes sway {
-      0% { transform: rotate(-2deg) skewX(-10deg); }
-      50% { transform: rotate(2deg) skewX(10deg); }
-      100% { transform: rotate(-2deg) skewX(-10deg); }
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      max-width: 400px;
-      width: 90%;
-      margin: 0 auto 40px;
-    }
-
-    input[type="email"] {
-      padding: 14px;
-      margin-bottom: 12px;
-      font-size: 1em;
-      border: none;
-      border-radius: 4px;
-      outline: none;
-      background-color: #111;
-      color: #fff;
-    }
-
-    button[type="submit"] {
-      padding: 14px;
-      font-size: 1em;
-      font-weight: bold;
+    .join-button {
+      margin: 60px auto 20px;
+      padding: 14px 36px;
+      background-color: #2ecc40; /* green */
       color: #000;
-      background-color: #2ecc40;
+      font-weight: bold;
+      font-size: 18px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      transition: 0.3s;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
+      transition: background-color 0.3s ease;
     }
-
-    button[type="submit"]:hover {
+    .join-button:hover {
       background-color: #27ae36;
       color: #fff;
     }
 
-    #confirmation-message {
-      display: none;
-      font-size: 2em;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px #eee, 0 0 20px #fff;
-      transform: rotate(-3deg) skewX(-10deg);
-      line-height: 1.5em;
-      max-width: 90%;
+    .countdown, .prize-pool {
+      color: #ccc;
+      font-family: monospace;
+      font-size: 20px;
+      margin: 20px 0 10px 0;
+      user-select: none;
+      text-align: center;
+      min-width: 280px;
+    }
+
+    .questions-link {
       margin-top: 40px;
-      animation: pulse 2s infinite alternate ease-in-out;
+      color: #ccc;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: underline;
+      user-select: none;
+      text-align: center;
+    }
+    .questions-link:hover {
+      color: #eee;
     }
 
-    @keyframes pulse {
-      0% { text-shadow: 0 0 10px #eee, 0 0 20px #fff; transform: rotate(-3deg) skewX(-10deg); }
-      50% { text-shadow: 0 0 15px #fff, 0 0 30px #fff; transform: rotate(3deg) skewX(10deg); }
-      100% { text-shadow: 0 0 10px #eee, 0 0 20px #fff; transform: rotate(-3deg) skewX(-10deg); }
-    }
-
-    p.legal {
-      font-size: 0.8em;
-      margin-top: 10px;
-      color: #888;
+    /* Google Translate widget position */
+    #google_translate_element {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
 
-  <h1>Signal Your Intent</h1>
+  <div id="google_translate_element"></div>
 
-  <form id="gromainForm" action="https://formspree.io/f/your-form-id" method="POST">
-    <input type="email" name="email" placeholder="Enter your email address" required>
-    <input type="hidden" name="codename" id="codename" value="">
-    <button type="submit">Transmit</button>
-  </form>
+  <div class="container">
+Greetings.
 
-  <p class="legal">By submitting, you agree to receive communication related to Gromain.</p>
+This is the voice of Grom.
 
-  <div id="confirmation-message">
-    Once attuned, your presence is etched into Gromain’s existence
+The Gromain Protocol is now active.
+
+What is Gromain?  
+A decentralized initiative.  
+A skill-based system.  
+A challenge.
+
+This is not a gamble.  
+It is the future of intellect.  
+You do not play by chance — you advance by intellect.
+
+Nourish your intellect with Gromain.
+
+The Gametopia will consist of:  
+▪︎ PUZZLES — Behind each puzzle lies design.  
+▪︎ RIDDLES — Behind each riddle lies intention.  
+▪︎ And more trials yet to be revealed.
+
+But don’t be misled.
+
+Gromain is not merely a game.  
+It is a filtration mechanism — for those who can perceive beyond the obvious.
+
+It is more than competition.  
+It is an exercise in perception — a calibration of mind.
+
+You either win… or evolve.  
+Even in loss, something is gained.
+
+To the unaware, this will look like nothing.  
+To the attuned, it will echo long after it ends.
+
+Your perspective is your entry point.
+
+Proceed with awareness.
+
+Phase One begins soon.
+
+— AAA-000
   </div>
 
-<script>
-  const form = document.getElementById('gromainForm');
-  const codenameInput = document.getElementById('codename');
-  const confirmationMessage = document.getElementById('confirmation-message');
+  <a href="join.html" class="join-button" id="joinBtn">Join</a>
 
-  function generateCodename() {
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const numbers = '0123456789';
-      let code = '';
-      for(let i=0;i<3;i++) code += letters[Math.floor(Math.random()*letters.length)];
-      code += '-';
-      for(let i=0;i<3;i++) code += numbers[Math.floor(Math.random()*numbers.length)];
-      return code;
+  <div class="countdown" id="countdown">Loading timer...</div>
+
+  <div class="prize-pool" id="prizePool">Current Prize Pool: $0</div>
+
+  <div class="questions-link" id="questionsLink">Questions?</div>
+
+<script>
+  // ====== COUNTDOWN TIMER =======
+  // Set your countdown target date here (YYYY, M-1, D, H, M, S)
+  // Example: August 1, 2025, 00:00:00
+  const countdownTarget = new Date(2025, 7, 1, 0, 0, 0);
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = countdownTarget - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown').textContent = "Phase One has begun.";
+      clearInterval(countdownInterval);
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('countdown').textContent =
+      `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
   }
 
-  form.addEventListener('submit', function(e){
-      e.preventDefault();
-      codenameInput.value = generateCodename();
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
 
-      fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-      }).then(response => {
-          form.style.display = 'none';
-          confirmationMessage.style.display = 'block';
-          confirmationMessage.scrollIntoView({ behavior: 'smooth' });
-      }).catch(error => {
-          alert("Submission failed. Try again.");
-      });
+  // ====== PRIZE POOL CALCULATION =======
+  // Customize this function for how you want the prize pool to update
+  // Example: Prize starts at 1000 and increases by 10 every 5 seconds
+
+  let prizeStart = 1000;
+  let prizeIncrement = 10;
+  let incrementIntervalSeconds = 5;
+  let startTime = new Date();
+
+  function updatePrizePool() {
+    const now = new Date();
+    const secondsPassed = Math.floor((now - startTime) / 1000);
+    const incrementsPassed = Math.floor(secondsPassed / incrementIntervalSeconds);
+    const currentPrize = prizeStart + incrementsPassed * prizeIncrement;
+
+    document.getElementById('prizePool').textContent =
+      `Current Prize Pool: $${currentPrize.toLocaleString()}`;
+  }
+
+  setInterval(updatePrizePool, 1000);
+  updatePrizePool();
+
+  // ====== QUESTIONS? LINK =======
+  document.getElementById('questionsLink').addEventListener('click', () => {
+    window.location.href = "faq.html"; // change this to your actual FAQ page URL
   });
+
+  // ====== GOOGLE TRANSLATE WIDGET =======
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+      { pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+      'google_translate_element'
+    );
+  }
 </script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>

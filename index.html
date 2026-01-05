@@ -10,7 +10,7 @@
       color: #ccc;
       font-family: 'Courier New', Courier, monospace;
       margin: 0;
-      padding: 40px 20px 140px; /* extra bottom space */
+      padding: 40px 20px 140px;
       box-sizing: border-box;
       min-height: 100vh;
       display: flex;
@@ -30,7 +30,7 @@
     .join-button {
       margin: 60px auto 20px;
       padding: 14px 36px;
-      background-color: #2ecc40; /* green */
+      background-color: #2ecc40;
       color: #000;
       font-weight: bold;
       font-size: 18px;
@@ -71,13 +71,57 @@
       color: #eee;
     }
 
-    /* Google Translate widget position */
     #google_translate_element {
       position: fixed;
       top: 10px;
       right: 10px;
       z-index: 1000;
     }
+
+    /* Hidden join form */
+    #gromain-join {
+      display: none;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      margin-top: 40px;
+    }
+    #gromain-join input[type="email"] {
+      width: 100%;
+      padding: 14px;
+      background: #111;
+      border: 1px solid #333;
+      color: #fff;
+      font-size: 1em;
+      margin-bottom: 12px;
+    }
+    #gromain-join button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background: #1f1f1f;
+      border: 1px solid #444;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    #gromain-join button[type="submit"]:hover {
+      background: #2a2a2a;
+    }
+
+    /* Encrypted-style confirmation message */
+    #confirmation-message {
+      display: none;
+      color: #eee;
+      font-size: 2.2em;
+      text-align: center;
+      margin-top: 40px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #eee, 0 0 20px #fff;
+      transform: rotate(-2deg) skewX(-5deg);
+      line-height: 1.5em;
+    }
+
   </style>
 </head>
 <body>
@@ -130,46 +174,89 @@ Phase One begins soon.
 — AAA-000
   </div>
 
-  <a href="join.html" class="join-button" id="join.html">Join</a>
+  <a class="join-button" id="joinBtn">Join</a>
+
+  <!-- Hidden Gromain Join Form -->
+  <section id="gromain-join">
+    <form id="gromainForm" action="https://formspree.io/f/your-form-id" method="POST">
+      <input type="email" name="email" placeholder="Enter your email address" required>
+      <input type="hidden" name="codename" id="codename" value="">
+      <button type="submit">Transmit</button>
+    </form>
+  </section>
+
+  <div id="confirmation-message">
+    Once attuned, your presence is etched into Gromain’s existence
+  </div>
 
   <div class="countdown" id="countdown">Loading timer...</div>
-
   <div class="prize-pool" id="prizePool">Current Prize Pool: $0</div>
-
   <div class="questions-link" id="questionsLink">Questions?</div>
 
 <script>
-  // ====== COUNTDOWN TIMER =======
-  // Set your countdown target date here (YYYY, M-1, D, H, M, S)
-  // Example: August 1, 2025, 00:00:00
-  const countdownTarget = new Date(2025, 7, 1, 0, 0, 0);
+  // ====== JOIN BUTTON SHOWS HIDDEN FORM =======
+  const joinButton = document.getElementById('joinBtn');
+  const gromainJoin = document.getElementById('gromain-join');
+  const confirmationMessage = document.getElementById('confirmation-message');
 
+  joinButton.addEventListener('click', () => {
+      gromainJoin.style.display = 'block';
+      gromainJoin.scrollIntoView({ behavior: 'smooth' });
+      joinButton.style.display = 'none';
+  });
+
+  // ====== ENCRYPTED FORM SUBMISSION =======
+  const gromainForm = document.getElementById('gromainForm');
+  const codenameInput = document.getElementById('codename');
+
+  function generateCodename() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const numbers = '0123456789';
+      let code = '';
+      for(let i=0;i<3;i++) code += letters[Math.floor(Math.random()*letters.length)];
+      code += '-';
+      for(let i=0;i<3;i++) code += numbers[Math.floor(Math.random()*numbers.length)];
+      return code;
+  }
+
+  gromainForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      codenameInput.value = generateCodename();
+
+      fetch(gromainForm.action, {
+          method: 'POST',
+          body: new FormData(gromainForm),
+          headers: { 'Accept': 'application/json' }
+      }).then(response => {
+          gromainForm.style.display = 'none';
+          confirmationMessage.style.display = 'block';
+          confirmationMessage.scrollIntoView({ behavior: 'smooth' });
+      }).catch(error => {
+          alert("Submission failed. Try again.");
+      });
+  });
+
+  // ====== COUNTDOWN TIMER =======
+  const countdownTarget = new Date(2025, 7, 1, 0, 0, 0);
   function updateCountdown() {
     const now = new Date();
     const diff = countdownTarget - now;
-
     if (diff <= 0) {
       document.getElementById('countdown').textContent = "Phase One has begun.";
       clearInterval(countdownInterval);
       return;
     }
-
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
-
     document.getElementById('countdown').textContent =
       `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
   }
-
   const countdownInterval = setInterval(updateCountdown, 1000);
   updateCountdown();
 
-  // ====== PRIZE POOL CALCULATION =======
-  // Customize this function for how you want the prize pool to update
-  // Example: Prize starts at 1000 and increases by 10 every 5 seconds
-
+  // ====== PRIZE POOL =======
   let prizeStart = 1000;
   let prizeIncrement = 10;
   let incrementIntervalSeconds = 5;
@@ -180,17 +267,15 @@ Phase One begins soon.
     const secondsPassed = Math.floor((now - startTime) / 1000);
     const incrementsPassed = Math.floor(secondsPassed / incrementIntervalSeconds);
     const currentPrize = prizeStart + incrementsPassed * prizeIncrement;
-
     document.getElementById('prizePool').textContent =
       `Current Prize Pool: $${currentPrize.toLocaleString()}`;
   }
-
   setInterval(updatePrizePool, 1000);
   updatePrizePool();
 
   // ====== QUESTIONS? LINK =======
   document.getElementById('questionsLink').addEventListener('click', () => {
-    window.location.href = "faq.html"; // change this to your actual FAQ page URL
+    window.location.href = "faq.html"; 
   });
 
   // ====== GOOGLE TRANSLATE WIDGET =======
@@ -205,5 +290,3 @@ Phase One begins soon.
 
 </body>
 </html>
-
-#Glomain

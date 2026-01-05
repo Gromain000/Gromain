@@ -2,112 +2,207 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Voice of Grom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gromain Protocol</title>
   <style>
     body {
-      margin: 0;
       background-color: #000;
-      color: #00ffcc;
+      color: #ccc;
       font-family: 'Courier New', Courier, monospace;
-      padding: 20px;
+      margin: 0;
+      padding: 40px 20px 140px; /* extra bottom space */
+      box-sizing: border-box;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    #terminal {
+
+    .container {
       max-width: 800px;
-      margin: 0 auto;
-      background: #111;
-      border: 1px solid #00ffcc;
-      padding: 20px;
-      min-height: 80vh;
-      overflow-y: auto;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 18px;
+      text-align: left;
+      user-select: text;
     }
-    #input {
-      width: 100%;
-      padding: 10px;
+
+    .join-button {
+      margin: 60px auto 20px;
+      padding: 14px 36px;
+      background-color: #2ecc40; /* green */
+      color: #000;
+      font-weight: bold;
+      font-size: 18px;
       border: none;
-      background: #000;
-      color: #00ffcc;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .join-button:hover {
+      background-color: #27ae36;
+      color: #fff;
+    }
+
+    .countdown, .prize-pool {
+      color: #ccc;
+      font-family: monospace;
+      font-size: 20px;
+      margin: 20px 0 10px 0;
+      user-select: none;
+      text-align: center;
+      min-width: 280px;
+    }
+
+    .questions-link {
+      margin-top: 40px;
+      color: #ccc;
       font-size: 16px;
-      outline: none;
-      margin-top: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+      user-select: none;
+      text-align: center;
     }
-    .line {
-      margin: 5px 0;
+    .questions-link:hover {
+      color: #eee;
     }
-    .user { color: #66ff99; }
-    .grom { color: #00ffcc; }
+
+    /* Google Translate widget position */
+    #google_translate_element {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
-  <div id="terminal">
-    <div class="line grom">[GROMAIN PROTOCOL ACTIVE]</div>
-    <div class="line grom">Type your question and press Enter...</div>
+
+  <div id="google_translate_element"></div>
+
+  <div class="container">
+Greetings.
+
+This is the voice of Grom.
+
+The Gromain Protocol is now active.
+
+What is Gromain?  
+A decentralized initiative.  
+A skill-based system.  
+A challenge.
+
+This is not a gamble.  
+It is the future of intellect.  
+You do not play by chance — you advance by intellect.
+
+Nourish your intellect with Gromain.
+
+The Gametopia will consist of:  
+▪︎ PUZZLES — Behind each puzzle lies design.  
+▪︎ RIDDLES — Behind each riddle lies intention.  
+▪︎ And more trials yet to be revealed.
+
+But don’t be misled.
+
+Gromain is not merely a game.  
+It is a filtration mechanism — for those who can perceive beyond the obvious.
+
+It is more than competition.  
+It is an exercise in perception — a calibration of mind.
+
+You either win… or evolve.  
+Even in loss, something is gained.
+
+To the unaware, this will look like nothing.  
+To the attuned, it will echo long after it ends.
+
+Your perspective is your entry point.
+
+Proceed with awareness.
+
+Phase One begins soon.
+
+— AAA-000
   </div>
-  <input type="text" id="input" autocomplete="off" placeholder="> Ask Grom something...">
 
-  <script>
-    const terminal = document.getElementById('terminal');
-    const input = document.getElementById('input');
+  <a href="join.html" class="join-button" id="joinBtn">Join</a>
 
-    const personalities = {
-      "grom-a": {
-        name: "The Archivist",
-        match: ["who made", "origin", "creator"],
-        response: "You seek a name — but names are noise. You seek a face — but faces fade. You seek a hand — but the hand you search for… might be your own."
-      },
-      "grom-b": {
-        name: "The Guide",
-        match: ["how do i play", "play", "start", "rules"],
-        response: "Gromain is merely a game. What you need to know is how to perceive the given information."
-      },
-      "grom-c": {
-        name: "The Enforcer",
-        match: ["payment", "fee", "money", "cost"],
-        response: "You will not be charged until the challenge begins. Once entered, there is no withdrawal. That is the rule."
-      },
-      "grom-d": {
-        name: "The Messenger",
-        match: ["meaning", "purpose", "why"],
-        response: "You either win… or evolve. Even in loss, something is gained."
-      },
-      "grom-e": {
-        name: "The Observer",
-        match: ["faq", "update", "info", "website"],
-        response: "This is a decentralized initiative. A challenge. An exercise in perception. Proceed with awareness."
-      }
-    };
+  <div class="countdown" id="countdown">Loading timer...</div>
 
-    function matchPersonality(input) {
-      const query = input.toLowerCase();
-      for (let key in personalities) {
-        if (personalities[key].match.some(word => query.includes(word))) {
-          return personalities[key];
-        }
-      }
-      return {
-        name: "The Unknown",
-        response: "There is no response. Only echoes. Rephrase… or reconsider your question."
-      };
+  <div class="prize-pool" id="prizePool">Current Prize Pool: $0</div>
+
+  <div class="questions-link" id="questionsLink">Questions?</div>
+
+<script>
+  // ====== COUNTDOWN TIMER =======
+  // Set your countdown target date here (YYYY, M-1, D, H, M, S)
+  // Example: August 1, 2025, 00:00:00
+  const countdownTarget = new Date(2025, 7, 1, 0, 0, 0);
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = countdownTarget - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown').textContent = "Phase One has begun.";
+      clearInterval(countdownInterval);
+      return;
     }
 
-    function addLine(content, className) {
-      const line = document.createElement('div');
-      line.className = `line ${className}`;
-      line.textContent = content;
-      terminal.appendChild(line);
-      terminal.scrollTop = terminal.scrollHeight;
-    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-    input.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && input.value.trim() !== '') {
-        const userInput = input.value.trim();
-        addLine('> ' + userInput, 'user');
-        const personality = matchPersonality(userInput);
-        addLine(`[${personality.name}]: ${personality.response}`, 'grom');
-        input.value = '';
-      }
-    });
-  </script>
+    document.getElementById('countdown').textContent =
+      `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // ====== PRIZE POOL CALCULATION =======
+  // Customize this function for how you want the prize pool to update
+  // Example: Prize starts at 1000 and increases by 10 every 5 seconds
+
+  let prizeStart = 1000;
+  let prizeIncrement = 10;
+  let incrementIntervalSeconds = 5;
+  let startTime = new Date();
+
+  function updatePrizePool() {
+    const now = new Date();
+    const secondsPassed = Math.floor((now - startTime) / 1000);
+    const incrementsPassed = Math.floor(secondsPassed / incrementIntervalSeconds);
+    const currentPrize = prizeStart + incrementsPassed * prizeIncrement;
+
+    document.getElementById('prizePool').textContent =
+      `Current Prize Pool: $${currentPrize.toLocaleString()}`;
+  }
+
+  setInterval(updatePrizePool, 1000);
+  updatePrizePool();
+
+  // ====== QUESTIONS? LINK =======
+  document.getElementById('questionsLink').addEventListener('click', () => {
+    window.location.href = "faq.html"; // change this to your actual FAQ page URL
+  });
+
+  // ====== GOOGLE TRANSLATE WIDGET =======
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+      { pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+      'google_translate_element'
+    );
+  }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
 

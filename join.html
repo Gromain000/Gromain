@@ -61,6 +61,12 @@
             opacity: 0.5;
             margin-top: 20px;
         }
+        .confirmation {
+            margin-top: 15px;
+            color: #00ff99;
+            font-size: 0.9em;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -68,13 +74,17 @@
         <h1>Signal Your Intent</h1>
         <div class="lore">
             This is not a registration.<br>
-            Only signals deemed relevant receive a response.
+            potlhbogh QInmey neH janglu’.
         </div>
 
         <form id="signalForm">
-            <input type="email" placeholder="Enter your email address" required>
+            <input type="email" id="emailInput" placeholder="Enter your email address" required>
             <button type="submit">Transmit</button>
         </form>
+
+        <div class="confirmation" id="confirmationMessage">
+            Your signal has been transmitted. Welcome to Gromain.
+        </div>
 
         <div class="legal">
             By submitting, you agree to receive communication related to Gromain.
@@ -86,11 +96,20 @@
     </div>
 
     <script>
-        // Optional: handle form submission
-        document.getElementById('signalForm').addEventListener('submit', function(e) {
+        const form = document.getElementById('signalForm');
+        const emailInput = document.getElementById('emailInput');
+        const confirmation = document.getElementById('confirmationMessage');
+
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Your signal has been transmitted.'); // Placeholder response
-            this.reset();
+            const email = emailInput.value;
+
+            // Here you could add a real backend call to store the email
+            console.log("Email submitted:", email);
+
+            // Show confirmation
+            confirmation.style.display = 'block';
+            emailInput.value = '';
         });
     </script>
 </body>

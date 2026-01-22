@@ -61,27 +61,20 @@
             opacity: 0.5;
             margin-top: 20px;
         }
-        .confirmation {
-            margin-top: 15px;
-            color: #00ff99;
-            font-size: 0.9em;
-            display: none;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Signal Your Intent</h1>
+
         <div class="lore">
-            This is not a registration.<br>
-            
+            This is not a registration.
         </div>
 
-        <form id="signalForm">
-            <input type="email" id="emailInput" placeholder="Enter your email address" required>
+        <form>
+            <input type="email" placeholder="Enter your email address" required>
             <button type="submit">Transmit</button>
         </form>
-        </div>
 
         <div class="legal">
             By submitting, you agree to receive communication related to Gromain.
@@ -91,23 +84,5 @@
             Silence does not mean rejection.
         </div>
     </div>
-
-    <script>
-        const form = document.getElementById('signalForm');
-        const emailInput = document.getElementById('emailInput');
-        const confirmation = document.getElementById('confirmationMessage');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = emailInput.value;
-
-            // Here you could add a real backend call to store the email
-            console.log("Email submitted:", email);
-
-            // Show confirmation
-            confirmation.style.display = 'block';
-            emailInput.value = '';
-        });
-    </script>
 </body>
 </html>

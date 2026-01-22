@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gromain Protocol</title>
+
 <style>
   body {
     background-color: #000;
@@ -13,20 +20,27 @@
   }
 
   .container {
-    max-width: 650px; /* ADDED — keeps same readable width */
-    width: 100%; /* ADDED */
-    
-    white-space: pre-line; /* CHANGED from pre-wrap (translation-safe) */
-    
+    max-width: 650px;
+    width: 100%;
+
+    white-space: pre-line;
+
     line-height: 1.7;
     font-size: 18px;
     text-align: left;
     user-select: text;
 
-    margin: 0 auto; /* ADDED — locks center layout */
+    margin: 0 auto;
 
-    word-break: break-word; /* ADDED — prevents overflow */
-    overflow-wrap: anywhere; /* ADDED — prevents long translated words breaking layout */
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* FORCE GOOGLE TRANSLATE TEXT COLOR */
+  .container span,
+  .container font,
+  .container * {
+    color: #ccc !important;
   }
 
   .join-button {
@@ -82,12 +96,6 @@
     z-index: 1000;
   }
 
-  /* ADDED — stops Google Translate from collapsing spacing */
-  .goog-te-gadget span {
-    white-space: normal !important;
-  }
-
-  /* Hidden join form */
   #gromain-join {
     display: none;
     text-align: center;
@@ -133,3 +141,74 @@
     line-height: 1.5em;
   }
 </style>
+</head>
+
+<body>
+
+<div id="google_translate_element"></div>
+
+<div class="container">
+Greetings.
+
+This is the voice of Grom.
+
+The Gromain Protocol is now active.
+
+What is Gromain?  
+A decentralized initiative.  
+A skill-based system.  
+A challenge.
+
+This is not a gamble.  
+It is the future of intellect.  
+You do not play by chance — you advance by intellect.
+
+Nourish your intellect with Gromain.
+
+The Gametopia will consist of:  
+▪︎ PUZZLES — Behind each puzzle lies design.  
+▪︎ RIDDLES — Behind each riddle lies intention.  
+▪︎ And more trials yet to be revealed.
+
+But don’t be misled.
+
+Gromain is not merely a game.  
+It is a filtration mechanism — for those who can perceive beyond the obvious.
+
+It is more than competition.  
+It is an exercise in perception — a calibration of mind.
+
+You either win… or evolve.  
+Even in loss, something is gained.
+
+To the unaware, this will look like nothing.  
+To the attuned, it will echo long after it ends.
+
+Your perspective is your entry point.
+
+Proceed with awareness.
+
+Phase One begins soon.
+
+— AAA-000
+</div>
+
+<a class="join-button" href="join.html">Join</a>
+
+<div class="countdown" id="countdown">Loading timer...</div>
+<div class="prize-pool" id="prizePool">Current Prize Pool: $0</div>
+<div class="questions-link" id="questionsLink">Questions?</div>
+
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    { pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

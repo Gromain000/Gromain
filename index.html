@@ -200,10 +200,16 @@ display:block;
 <div class="prize-pool" id="prizePool">Current Prize Pool: $0</div>
 <div class="questions-link" id="questionsLink">Questions?</div>
 
+<!-- GOOGLE TRANSLATE -->
+<div id="google_translate_element"></div>
+  
 <script>
 function googleTranslateElementInit() {
   new google.translate.TranslateElement(
-    { pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+    {
+      pageLanguage: 'en',
+      autoDisplay: false
+    },
     'google_translate_element'
   );
 }

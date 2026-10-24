@@ -19,21 +19,59 @@
             height: 100vh;
             margin: 0;
         }
+
         .container {
             max-width: 420px;
             width: 90%;
             text-align: center;
         }
+
+        .aperture-heading {
+            position: relative;
+        }
+
         h1 {
             font-weight: 500;
             letter-spacing: 1px;
             margin-bottom: 10px;
         }
+
+        /* Help icon */
+        .help-icon {
+            position: absolute;
+            left: calc(50% + 95px);
+            top: -8px;
+            width: 22px;
+            height: 22px;
+            padding: 0;
+            border: 1px solid #555;
+            border-radius: 50%;
+            background: transparent;
+            color: #aaa;
+            font-size: 13px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+            animation: introNudge 0.7s ease-in-out 1.2s 2;
+        }
+
+        .help-icon:hover {
+            color: #fff;
+            border-color: #888;
+            background: #1a1a1a;
+        }
+
+        @keyframes introNudge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
         .lore {
             font-size: 0.95em;
             opacity: 0.85;
             margin-bottom: 25px;
         }
+
         input[type="email"] {
             width: 100%;
             padding: 14px;
@@ -42,7 +80,9 @@
             color: #fff;
             font-size: 1em;
             margin-bottom: 12px;
+            box-sizing: border-box;
         }
+
         button {
             width: 100%;
             padding: 14px;
@@ -52,18 +92,144 @@
             font-size: 1em;
             cursor: pointer;
         }
+
         button:hover {
             background: #2a2a2a;
         }
+
+        /* Keep the help icon compact */
+        .help-icon {
+            width: 22px;
+            height: 22px;
+            padding: 0;
+        }
+
         .legal {
             font-size: 0.75em;
             opacity: 0.6;
             margin-top: 14px;
         }
+
         .footer-lore {
             font-size: 0.75em;
             opacity: 0.5;
             margin-top: 20px;
+        }
+
+        /* Information popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.78);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .popup-overlay.visible {
+            display: flex;
+        }
+
+        .popup {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+            background: #111;
+            border: 1px solid #383838;
+            padding: 28px 24px;
+            text-align: left;
+            animation: popupAppear 0.25s ease-out;
+        }
+
+        @keyframes popupAppear {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .popup h2 {
+            margin: 0 30px 22px 0;
+            font-size: 1.1em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .popup p {
+            font-size: 0.9em;
+            line-height: 1.65;
+            color: #d0d0d0;
+            margin: 0 0 17px;
+        }
+
+        .popup p:last-child {
+            margin-bottom: 0;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            background: transparent;
+            border: 1px solid #444;
+            color: #aaa;
+            font-size: 20px;
+            line-height: 26px;
+        }
+
+        .popup-close:hover {
+            color: #fff;
+            background: #222;
+        }
+
+        /* Small particles travelling back to the ? */
+        .particle {
+            position: fixed;
+            z-index: 10001;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #c7c7c7;
+            pointer-events: none;
+            animation: particleReturn 0.55s ease-in forwards;
+        }
+
+        @keyframes particleReturn {
+            0% {
+                opacity: 0.9;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--move-x), var(--move-y)) scale(0.2);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .help-icon {
+                animation: none;
+            }
+
+            .popup {
+                animation: none;
+            }
+
+            .particle {
+                animation-duration: 0.01ms;
+            }
         }
 
         /* Klingon confirmation text */
@@ -72,30 +238,29 @@
             font-size: 1em;
         }
 
-/* GOOGLE TRANSLATE */
-#google_translate_element{
-position:fixed;
-top:10px;
-right:10px;
-z-index:999999;
-}
+        /* GOOGLE TRANSLATE */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999999;
+        }
 
-.goog-te-gadget{
-font-size:12px !important;
-}
+        .goog-te-gadget {
+            font-size: 12px !important;
+        }
 
-.goog-te-gadget span{
-display:none;
-}
+        .goog-te-gadget span {
+            display: none;
+        }
 
-.goog-te-combo{
-background:#111;
-color:#fff;
-border:1px solid #333;
-padding:6px;
-border-radius:6px;
-}
-        
+        .goog-te-combo {
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 6px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
@@ -105,24 +270,35 @@ border-radius:6px;
 
 <script>
 function googleTranslateElementInit() {
-  new google.translate.TranslateElement(
-    {
-      pageLanguage: 'en',
-      autoDisplay: false
-    },
-    'google_translate_element'
-  );
+    new google.translate.TranslateElement(
+        {
+            pageLanguage: 'en',
+            autoDisplay: false
+        },
+        'google_translate_element'
+    );
 }
 </script>
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    
+
 <div class="container" id="mainContainer">
 
-    <h1>The Aperture.</h1>
+    <div class="aperture-heading">
+        <h1>The Aperture.</h1>
+        <button
+            type="button"
+            class="help-icon"
+            id="helpIcon"
+            aria-label="Information about the Gromain Protocol"
+            aria-haspopup="dialog"
+            aria-controls="infoPopup"
+            aria-expanded="false"
+        >?</button>
+    </div>
 
     <div class="lore">
-    This is not a registration.
+        This is not a registration.
     </div>
 
     <form id="signalForm">
@@ -134,6 +310,64 @@ function googleTranslateElementInit() {
         By submitting, you agree to receive communication related to Gromain.
     </div>
 
+</div>
+
+<!-- Information popup -->
+<div class="popup-overlay" id="popupOverlay">
+    <section
+        class="popup"
+        id="infoPopup"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="popupTitle"
+        tabindex="-1"
+    >
+        <button
+            type="button"
+            class="popup-close"
+            id="closePopup"
+            aria-label="Close information"
+        >&times;</button>
+
+        <h2 id="popupTitle">The Gromain Protocol</h2>
+
+        <p>
+            The debut of the Gromain Protocol will take the form of a
+            prize-based competition.
+        </p>
+
+        <p>
+            The prize will be disclosed once participation reaches a
+            sufficient level to justify the event.
+        </p>
+
+        <p>
+            One week prior to the event, each prospective player will
+            receive a Cipher Ticket. This ticket will serve as their
+            unique identifier throughout the competition.
+        </p>
+
+        <p>
+            All relevant information regarding the event structure,
+            rules, and proceedings will be issued alongside the
+            Cipher Ticket.
+        </p>
+
+        <p>
+            Upon reviewing these details, each prospective player may
+            either confirm their participation or withdraw. No payment
+            is required before this decision.
+        </p>
+
+        <p>
+            The participation fee is €5, payable only upon confirmation.
+        </p>
+
+        <p>
+            By proceeding, you acknowledge that your email address will
+            be collected for event-related communication.
+        </p>
+    </section>
 </div>
 
 <!-- Klingon confirmation -->
@@ -151,6 +385,76 @@ const form = document.getElementById("signalForm");
 const emailInput = document.getElementById("emailInput");
 const container = document.getElementById("mainContainer");
 const confirmation = document.getElementById("confirmation");
+
+const helpIcon = document.getElementById("helpIcon");
+const popupOverlay = document.getElementById("popupOverlay");
+const infoPopup = document.getElementById("infoPopup");
+const closePopupButton = document.getElementById("closePopup");
+
+function openPopup() {
+    popupOverlay.classList.add("visible");
+    helpIcon.setAttribute("aria-expanded", "true");
+    closePopupButton.focus();
+}
+
+function closePopup() {
+    if (!popupOverlay.classList.contains("visible")) return;
+
+    const iconRect = helpIcon.getBoundingClientRect();
+    const popupRect = infoPopup.getBoundingClientRect();
+
+    const startX = popupRect.left + popupRect.width / 2;
+    const startY = popupRect.top + popupRect.height / 2;
+    const endX = iconRect.left + iconRect.width / 2;
+    const endY = iconRect.top + iconRect.height / 2;
+
+    // Create subtle particles that travel towards the help icon.
+    for (let i = 0; i < 14; i++) {
+        const particle = document.createElement("span");
+        particle.className = "particle";
+
+        const offsetX = (Math.random() - 0.5) * popupRect.width * 0.7;
+        const offsetY = (Math.random() - 0.5) * popupRect.height * 0.7;
+
+        particle.style.left = (startX + offsetX) + "px";
+        particle.style.top = (startY + offsetY) + "px";
+        particle.style.setProperty(
+            "--move-x",
+            (endX - startX - offsetX) + "px"
+        );
+        particle.style.setProperty(
+            "--move-y",
+            (endY - startY - offsetY) + "px"
+        );
+
+        document.body.appendChild(particle);
+
+        particle.addEventListener("animationend", () => {
+            particle.remove();
+        }, { once: true });
+    }
+
+    popupOverlay.classList.remove("visible");
+    helpIcon.setAttribute("aria-expanded", "false");
+    helpIcon.focus();
+}
+
+helpIcon.addEventListener("click", openPopup);
+closePopupButton.addEventListener("click", closePopup);
+
+// Clicking outside the popup closes it.
+popupOverlay.addEventListener("click", (e) => {
+    if (e.target === popupOverlay) {
+        closePopup();
+    }
+});
+
+// Escape key closes the popup.
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && popupOverlay.classList.contains("visible")) {
+        closePopup();
+    }
+});
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();

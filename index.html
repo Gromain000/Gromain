@@ -158,6 +158,17 @@ border-radius:6px;
     line-height: 1.5em;
   }
 
+  /* TYPING CURSOR */
+  .cursor {
+    animation: blink .8s infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
 </style>
 </head>
 
@@ -165,7 +176,10 @@ border-radius:6px;
 
 <div id="google_translate_element"></div>
 
-<div class="container"> 
+<div class="container" id="introText"></div>
+
+<!-- ORIGINAL TEXT, USED AS THE TYPING SOURCE -->
+<div id="introMessage" style="display:none;">
 <div class="line">Greetings.</div>
 <div style="height:20px;"></div>
 <div class="line">The Gromain Protocol is now active.</div>
@@ -180,7 +194,7 @@ border-radius:6px;
 <div class="line">You do not play by chance — you advance by intellect.</div>
 <div class="line">Nourish your intellect with Gromain.</div>
 <div style="height:20px;"></div>
-<div class="line">The Gametopia will consist of:  
+<div class="line">The Gametopia will consist of:</div>  
 <div class="line">▪︎ PUZZLES — Behind each puzzle lies design.</div>  
 <div class="line">▪︎ RIDDLES — Behind each riddle lies intention.</div>  
 <div class="line">▪︎ And more trials yet to be revealed.</div>
@@ -205,7 +219,7 @@ border-radius:6px;
 <div style="height:20px;"></div>
 <div class="line">Phase One begins soon.</div>
 <div style="height:20px;"></div>
-— AAA-000</div>
+<div class="line">— AAA-000</div>
 </div>
 
 <a class="join-button" href="join.html">Proceed</a>
@@ -230,6 +244,31 @@ function googleTranslateElementInit() {
 </script>
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!-- AUTOMATIC TYPING EFFECT -->
+<script>
+const introText = document.getElementById("introText");
+const introMessage = document.getElementById("introMessage");
+
+const text = introMessage.innerText;
+let i = 0;
+
+function type() {
+  if (i < text.length) {
+    introText.innerHTML =
+      text.substring(0, i + 1) +
+      "<span class='cursor'>█</span>";
+
+    i++;
+
+    setTimeout(type, 35);
+  } else {
+    introText.innerText = text;
+  }
+}
+
+type();
+</script>
 
 </body>
 </html>

@@ -252,62 +252,94 @@ function googleTranslateElementInit() {
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-<!-- AUTOMATIC TYPING EFFECT -->
 <script>
 
-const walker = document.createTreeWalker(
-  document.body,
-  NodeFilter.SHOW_TEXT,
-  {
-    acceptNode: function(node) {
+/* AUTOMATIC TYPING EFFECT — GOOGLE TRANSLATE COMPATIBLE */
 
-      if (!node.nodeValue.trim()) {
-        return NodeFilter.FILTER_REJECT;
-      }
+let typingTimer;
+let translationObserver;
+let characters = [];
+let index = 0;
 
-      if (
-        node.parentElement.closest(
-          '#google_translate_element, script, style'
-        )
-      ) {
-        return NodeFilter.FILTER_REJECT;
-      }
+function removeTypingSpans() {
 
-      return NodeFilter.FILTER_ACCEPT;
-    }
+  if (translationObserver) {
+    translationObserver.disconnect();
   }
-);
 
-const textNodes = [];
+  clearTimeout(typingTimer);
 
-while (walker.nextNode()) {
-  textNodes.push(walker.currentNode);
+  document.body.classList.remove("typing-pending");
+
+  document.querySelectorAll(".type-char").forEach(function(span) {
+    span.replaceWith(document.createTextNode(span.textContent));
+  });
+
+  document.body.normalize();
 }
 
-const characters = [];
+function startTyping() {
 
-textNodes.forEach(function(node) {
+  clearTimeout(typingTimer);
 
-  const text = node.nodeValue;
-  const fragment = document.createDocumentFragment();
+  characters = [];
+  index = 0;
 
-  for (let i = 0; i < text.length; i++) {
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode: function(node) {
 
-    const span = document.createElement("span");
+        if (!node.nodeValue.length) {
+          return NodeFilter.FILTER_REJECT;
+        }
 
-    span.className = "type-char";
-    span.textContent = text[i];
+        if (
+          node.parentElement.closest(
+            '#google_translate_element, script, style'
+          )
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
 
-    fragment.appendChild(span);
-    characters.push(span);
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    }
+  );
 
+  const textNodes = [];
+
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode);
   }
 
-  node.parentNode.replaceChild(fragment, node);
+  document.body.classList.add("typing-pending");
 
-});
+  textNodes.forEach(function(node) {
 
-let index = 0;
+    const text = node.nodeValue;
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < text.length; i++) {
+
+      const span = document.createElement("span");
+
+      span.className = "type-char";
+      span.textContent = text[i];
+
+      fragment.appendChild(span);
+      characters.push(span);
+
+    }
+
+    node.parentNode.replaceChild(fragment, node);
+
+  });
+
+  type();
+
+}
 
 function type() {
 
@@ -323,7 +355,7 @@ function type() {
 
     index++;
 
-    setTimeout(type, 35);
+    typingTimer = setTimeout(type, 35);
 
   } else {
 
@@ -333,9 +365,62 @@ function type() {
 
 }
 
-type();
+/* WAIT FOR GOOGLE TRANSLATE */
 
-</script>
+function waitForTranslate() {
 
+  const translateMenu = document.querySelector(".goog-te-combo");
+
+  if (!translateMenu) {
+    setTimeout(waitForTranslate, 100);
+    return;
+  }
+
+  translateMenu.addEventListener("change", function() {
+
+    setTimeout(function() {
+
+      removeTypingSpans();
+
+      let translationTimer;
+
+      translationObserver = new MutationObserver(function() {
+
+        clearTimeout(translationTimer);
+
+        translationTimer = setTimeout(function() {
+
+          startTyping();
+
+        }, 1200);
+
+      });
+
+      translationObserver.observe(document.body, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+
+      translationTimer = setTimeout(function() {
+
+        startTyping();
+
+      }, 2000);
+
+    }, 0);
+
+  });
+
+  /* START AUTOMATICALLY ON FIRST PAGE LOAD */
+
+  startTyping();
+
+}
+
+waitForTranslate();
+
+</script>  
+  
 </body>
 </html>

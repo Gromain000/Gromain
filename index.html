@@ -34,7 +34,6 @@
   .line{
 display:block;
 }
- 
 
   /* GOOGLE TRANSLATE */
 #google_translate_element{
@@ -59,7 +58,6 @@ border:1px solid #333;
 padding:6px;
 border-radius:6px;
 }
-
 
   .join-button {
     margin: 60px auto 20px;
@@ -158,8 +156,20 @@ border-radius:6px;
     line-height: 1.5em;
   }
 
-  /* TYPING CURSOR */
-  .cursor {
+  /* TYPING EFFECT */
+  .type-char {
+    position: relative;
+  }
+
+  body.typing-pending .type-char {
+    visibility: hidden;
+  }
+
+  .type-char.current::after {
+    content: "█";
+    position: absolute;
+    left: 100%;
+    top: 0;
     animation: blink .8s infinite;
   }
 
@@ -172,14 +182,11 @@ border-radius:6px;
 </style>
 </head>
 
-<body>
+<body class="typing-pending">
 
 <div id="google_translate_element"></div>
 
-<div class="container" id="introText"></div>
-
-<!-- ORIGINAL TEXT, USED AS THE TYPING SOURCE -->
-<div id="introMessage" style="display:none;">
+<div class="container"> 
 <div class="line">Greetings.</div>
 <div style="height:20px;"></div>
 <div class="line">The Gromain Protocol is now active.</div>
@@ -194,7 +201,7 @@ border-radius:6px;
 <div class="line">You do not play by chance — you advance by intellect.</div>
 <div class="line">Nourish your intellect with Gromain.</div>
 <div style="height:20px;"></div>
-<div class="line">The Gametopia will consist of:</div>  
+<div class="line">The Gametopia will consist of:  
 <div class="line">▪︎ PUZZLES — Behind each puzzle lies design.</div>  
 <div class="line">▪︎ RIDDLES — Behind each riddle lies intention.</div>  
 <div class="line">▪︎ And more trials yet to be revealed.</div>
@@ -219,7 +226,7 @@ border-radius:6px;
 <div style="height:20px;"></div>
 <div class="line">Phase One begins soon.</div>
 <div style="height:20px;"></div>
-<div class="line">— AAA-000</div>
+— AAA-000</div>
 </div>
 
 <a class="join-button" href="join.html">Proceed</a>
@@ -247,27 +254,87 @@ function googleTranslateElementInit() {
 
 <!-- AUTOMATIC TYPING EFFECT -->
 <script>
-const introText = document.getElementById("introText");
-const introMessage = document.getElementById("introMessage");
 
-const text = introMessage.innerText;
-let i = 0;
+const walker = document.createTreeWalker(
+  document.body,
+  NodeFilter.SHOW_TEXT,
+  {
+    acceptNode: function(node) {
+
+      if (!node.nodeValue.trim()) {
+        return NodeFilter.FILTER_REJECT;
+      }
+
+      if (
+        node.parentElement.closest(
+          '#google_translate_element, script, style'
+        )
+      ) {
+        return NodeFilter.FILTER_REJECT;
+      }
+
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  }
+);
+
+const textNodes = [];
+
+while (walker.nextNode()) {
+  textNodes.push(walker.currentNode);
+}
+
+const characters = [];
+
+textNodes.forEach(function(node) {
+
+  const text = node.nodeValue;
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < text.length; i++) {
+
+    const span = document.createElement("span");
+
+    span.className = "type-char";
+    span.textContent = text[i];
+
+    fragment.appendChild(span);
+    characters.push(span);
+
+  }
+
+  node.parentNode.replaceChild(fragment, node);
+
+});
+
+let index = 0;
 
 function type() {
-  if (i < text.length) {
-    introText.innerHTML =
-      text.substring(0, i + 1) +
-      "<span class='cursor'>█</span>";
 
-    i++;
+  if (index > 0) {
+    characters[index - 1].classList.remove("current");
+  }
+
+  if (index < characters.length) {
+
+    characters[index].style.visibility = "visible";
+
+    characters[index].classList.add("current");
+
+    index++;
 
     setTimeout(type, 35);
+
   } else {
-    introText.innerText = text;
+
+    document.body.classList.remove("typing-pending");
+
   }
+
 }
 
 type();
+
 </script>
 
 </body>

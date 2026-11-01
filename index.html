@@ -32,32 +32,33 @@
   }
 
   .line{
-display:block;
-}
+    display:block;
+  }
 
   /* GOOGLE TRANSLATE */
-#google_translate_element{
-position:fixed;
-top:10px;
-right:10px;
-z-index:999999;
-}
 
-.goog-te-gadget{
-font-size:12px !important;
-}
+  #google_translate_element{
+    position:fixed;
+    top:10px;
+    right:10px;
+    z-index:999999;
+  }
 
-.goog-te-gadget span{
-display:none;
-}
+  .goog-te-gadget{
+    font-size:12px !important;
+  }
 
-.goog-te-combo{
-background:#111;
-color:#fff;
-border:1px solid #333;
-padding:6px;
-border-radius:6px;
-}
+  .goog-te-gadget span{
+    display:none;
+  }
+
+  .goog-te-combo{
+    background:#111;
+    color:#fff;
+    border:1px solid #333;
+    padding:6px;
+    border-radius:6px;
+  }
 
   .join-button {
     margin: 60px auto 20px;
@@ -102,13 +103,6 @@ border-radius:6px;
 
   .questions-link:hover {
     color: #eee;
-  }
-
-  #google_translate_element {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
   }
 
   #gromain-join {
@@ -157,6 +151,7 @@ border-radius:6px;
   }
 
   /* TYPING EFFECT */
+
   .type-char {
     position: relative;
   }
@@ -236,8 +231,7 @@ border-radius:6px;
 <div class="questions-link" id="questionsLink">Questions?</div>
 
 <!-- GOOGLE TRANSLATE -->
-<div id="google_translate_element"></div>
-  
+
 <script>
 function googleTranslateElementInit() {
   new google.translate.TranslateElement(
@@ -252,38 +246,50 @@ function googleTranslateElementInit() {
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+<!-- TYPING EFFECT -->
+
 <script>
 
-/* AUTOMATIC TYPING EFFECT — GOOGLE TRANSLATE COMPATIBLE */
+let typingTimer = null;
+let translationObserver = null;
+let translationDebounce = null;
+let translationFallback = null;
 
-let typingTimer;
-let translationObserver;
 let characters = [];
 let index = 0;
+let typingStarted = false;
+
+/* REMOVE OLD CHARACTER SPANS */
 
 function removeTypingSpans() {
 
-  if (translationObserver) {
-    translationObserver.disconnect();
-  }
-
   clearTimeout(typingTimer);
 
-  document.body.classList.remove("typing-pending");
+  if (translationObserver) {
+    translationObserver.disconnect();
+    translationObserver = null;
+  }
 
   document.querySelectorAll(".type-char").forEach(function(span) {
-    span.replaceWith(document.createTextNode(span.textContent));
+
+    span.replaceWith(
+      document.createTextNode(span.textContent)
+    );
+
   });
 
   document.body.normalize();
-}
-
-function startTyping() {
-
-  clearTimeout(typingTimer);
 
   characters = [];
   index = 0;
+
+}
+
+/* START TYPING */
+
+function startTyping() {
+
+  removeTypingSpans();
 
   const walker = document.createTreeWalker(
     document.body,
@@ -304,6 +310,7 @@ function startTyping() {
         }
 
         return NodeFilter.FILTER_ACCEPT;
+
       }
     }
   );
@@ -329,6 +336,7 @@ function startTyping() {
       span.textContent = text[i];
 
       fragment.appendChild(span);
+
       characters.push(span);
 
     }
@@ -337,9 +345,14 @@ function startTyping() {
 
   });
 
+  index = 0;
+  typingStarted = true;
+
   type();
 
 }
+
+/* TYPE CHARACTER BY CHARACTER */
 
 function type() {
 
@@ -365,62 +378,104 @@ function type() {
 
 }
 
-/* WAIT FOR GOOGLE TRANSLATE */
+/* WAIT FOR TRANSLATION TO FINISH */
+
+function waitForTranslation() {
+
+  clearTimeout(translationDebounce);
+  clearTimeout(translationFallback);
+
+  if (translationObserver) {
+    translationObserver.disconnect();
+  }
+
+  removeTypingSpans();
+
+  let lastMutation = Date.now();
+
+  translationObserver = new MutationObserver(function() {
+
+    lastMutation = Date.now();
+
+    clearTimeout(translationDebounce);
+
+    translationDebounce = setTimeout(function() {
+
+      if (Date.now() - lastMutation >= 1000) {
+
+        translationObserver.disconnect();
+        translationObserver = null;
+
+        clearTimeout(translationFallback);
+
+        startTyping();
+
+      }
+
+    }, 1100);
+
+  });
+
+  translationObserver.observe(document.body, {
+
+    childList: true,
+    characterData: true,
+    subtree: true
+
+  });
+
+  /* SAFETY TIMEOUT */
+
+  translationFallback = setTimeout(function() {
+
+    if (translationObserver) {
+
+      translationObserver.disconnect();
+      translationObserver = null;
+
+      startTyping();
+
+    }
+
+  }, 7000);
+
+}
+
+/* WAIT FOR GOOGLE TRANSLATE MENU */
 
 function waitForTranslate() {
 
   const translateMenu = document.querySelector(".goog-te-combo");
 
   if (!translateMenu) {
-    setTimeout(waitForTranslate, 100);
+
+    setTimeout(waitForTranslate, 200);
+
     return;
+
   }
+
+  /* RESTART AFTER LANGUAGE CHANGE */
 
   translateMenu.addEventListener("change", function() {
 
-    setTimeout(function() {
-
-      removeTypingSpans();
-
-      let translationTimer;
-
-      translationObserver = new MutationObserver(function() {
-
-        clearTimeout(translationTimer);
-
-        translationTimer = setTimeout(function() {
-
-          startTyping();
-
-        }, 1200);
-
-      });
-
-      translationObserver.observe(document.body, {
-        childList: true,
-        characterData: true,
-        subtree: true
-      });
-
-      translationTimer = setTimeout(function() {
-
-        startTyping();
-
-      }, 2000);
-
-    }, 0);
+    waitForTranslation();
 
   });
 
-  /* START AUTOMATICALLY ON FIRST PAGE LOAD */
+  /* INITIAL PAGE LOAD */
 
-  startTyping();
+  if (!typingStarted) {
+
+    startTyping();
+
+  }
 
 }
 
 waitForTranslate();
 
-</script>  
-  
+</script>
+
 </body>
 </html>

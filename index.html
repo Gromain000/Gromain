@@ -31,28 +31,33 @@
     overflow-wrap: anywhere;
   }
 
-  .line{
+  .line {
     display:block;
   }
 
   /* GOOGLE TRANSLATE */
 
-  #google_translate_element{
+  #google_translate_element {
     position:fixed;
     top:10px;
     right:10px;
     z-index:999999;
+    visibility:hidden;
   }
 
-  .goog-te-gadget{
+  body.translation-ready #google_translate_element {
+    visibility:visible;
+  }
+
+  .goog-te-gadget {
     font-size:12px !important;
   }
 
-  .goog-te-gadget span{
+  .goog-te-gadget span {
     display:none;
   }
 
-  .goog-te-combo{
+  .goog-te-combo {
     background:#111;
     color:#fff;
     border:1px solid #333;
@@ -165,7 +170,7 @@
     position: absolute;
     left: 100%;
     top: 0;
-    animation: blink .8s infinite;
+    animation:blink .8s infinite;
   }
 
   @keyframes blink {
@@ -175,6 +180,32 @@
   }
 
 </style>
+
+<!-- CLEAR PREVIOUS GOOGLE TRANSLATE LANGUAGE -->
+
+<script>
+(function() {
+  const hostname = location.hostname;
+  const parts = hostname.split('.');
+
+  const domains = [null, hostname];
+
+  for (let i = 1; i < parts.length - 1; i++) {
+    domains.push('.' + parts.slice(i).join('.'));
+  }
+
+  domains.forEach(function(domain) {
+    let cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+
+    if (domain) {
+      cookie += ' domain=' + domain + ';';
+    }
+
+    document.cookie = cookie;
+  });
+})();
+</script>
+
 </head>
 
 <body class="typing-pending">
@@ -244,52 +275,17 @@ function googleTranslateElementInit() {
 }
 </script>
 
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <!-- TYPING EFFECT -->
 
 <script>
 
 let typingTimer = null;
-let translationObserver = null;
-let translationDebounce = null;
-let translationFallback = null;
-
 let characters = [];
 let index = 0;
-let typingStarted = false;
-
-/* REMOVE OLD CHARACTER SPANS */
-
-function removeTypingSpans() {
-
-  clearTimeout(typingTimer);
-
-  if (translationObserver) {
-    translationObserver.disconnect();
-    translationObserver = null;
-  }
-
-  document.querySelectorAll(".type-char").forEach(function(span) {
-
-    span.replaceWith(
-      document.createTextNode(span.textContent)
-    );
-
-  });
-
-  document.body.normalize();
-
-  characters = [];
-  index = 0;
-
-}
-
-/* START TYPING */
 
 function startTyping() {
-
-  removeTypingSpans();
 
   const walker = document.createTreeWalker(
     document.body,
@@ -310,7 +306,6 @@ function startTyping() {
         }
 
         return NodeFilter.FILTER_ACCEPT;
-
       }
     }
   );
@@ -320,8 +315,6 @@ function startTyping() {
   while (walker.nextNode()) {
     textNodes.push(walker.currentNode);
   }
-
-  document.body.classList.add("typing-pending");
 
   textNodes.forEach(function(node) {
 
@@ -336,7 +329,6 @@ function startTyping() {
       span.textContent = text[i];
 
       fragment.appendChild(span);
-
       characters.push(span);
 
     }
@@ -346,13 +338,9 @@ function startTyping() {
   });
 
   index = 0;
-  typingStarted = true;
-
   type();
 
 }
-
-/* TYPE CHARACTER BY CHARACTER */
 
 function type() {
 
@@ -372,108 +360,37 @@ function type() {
 
   } else {
 
-    document.body.classList.remove("typing-pending");
+    finishTyping();
 
   }
 
 }
 
-/* WAIT FOR TRANSLATION TO FINISH */
+/* RESTORE NORMAL TEXT AND ENABLE TRANSLATION */
 
-function waitForTranslation() {
+function finishTyping() {
 
-  clearTimeout(translationDebounce);
-  clearTimeout(translationFallback);
+  clearTimeout(typingTimer);
 
-  if (translationObserver) {
-    translationObserver.disconnect();
-  }
+  document.querySelectorAll(".type-char").forEach(function(span) {
 
-  removeTypingSpans();
-
-  let lastMutation = Date.now();
-
-  translationObserver = new MutationObserver(function() {
-
-    lastMutation = Date.now();
-
-    clearTimeout(translationDebounce);
-
-    translationDebounce = setTimeout(function() {
-
-      if (Date.now() - lastMutation >= 1000) {
-
-        translationObserver.disconnect();
-        translationObserver = null;
-
-        clearTimeout(translationFallback);
-
-        startTyping();
-
-      }
-
-    }, 1100);
+    span.replaceWith(document.createTextNode(span.textContent));
 
   });
 
-  translationObserver.observe(document.body, {
+  document.body.normalize();
 
-    childList: true,
-    characterData: true,
-    subtree: true
+  document.body.classList.remove("typing-pending");
 
-  });
-
-  /* SAFETY TIMEOUT */
-
-  translationFallback = setTimeout(function() {
-
-    if (translationObserver) {
-
-      translationObserver.disconnect();
-      translationObserver = null;
-
-      startTyping();
-
-    }
-
-  }, 7000);
+  document.body.classList.add("translation-ready");
 
 }
 
-/* WAIT FOR GOOGLE TRANSLATE MENU */
+/* START AFTER THE PAGE HAS LOADED */
 
-function waitForTranslate() {
-
-  const translateMenu = document.querySelector(".goog-te-combo");
-
-  if (!translateMenu) {
-
-    setTimeout(waitForTranslate, 200);
-
-    return;
-
-  }
-
-  /* RESTART AFTER LANGUAGE CHANGE */
-
-  translateMenu.addEventListener("change", function() {
-
-    waitForTranslation();
-
-  });
-
-  /* INITIAL PAGE LOAD */
-
-  if (!typingStarted) {
-
-    startTyping();
-
-  }
-
-}
-
-waitForTranslate();
+window.addEventListener("load", function() {
+  startTyping();
+});
 
 </script>
 
